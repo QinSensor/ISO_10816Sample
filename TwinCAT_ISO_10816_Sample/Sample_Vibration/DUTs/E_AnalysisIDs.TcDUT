@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_AnalysisIDs" Id="{6da00e75-811a-45e4-808f-9e4fa9a1f0be}">
+    <Declaration><![CDATA[TYPE E_AnalysisIDs :
+(
+	(* analysis chain *)
+	eID_Source := 1,  
+	eID_IntRMS,   //  implicitly assigned to 2, which is one greater than the previous value. (automatically increments) Qin
+	eID_Sink
+) UDINT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

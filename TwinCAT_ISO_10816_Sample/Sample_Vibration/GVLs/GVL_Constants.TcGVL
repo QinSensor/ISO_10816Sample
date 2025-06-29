@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <GVL Name="GVL_Constants" Id="{86073f6d-fe3f-4a37-ba07-464349bc5836}">
+    <Declaration><![CDATA[VAR_GLOBAL CONSTANT	
+	
+	cOversamples 	: UDINT 	:= 10;		// number of oversamples
+	cFSample        : UDINT     := 10000;   // 1ms task with 10 oversamples = 10kHz
+	
+	// define FFT parameters, note that cFSample / cWindowLength must be such that numerical frequency resolution
+	// is lower than fLowerFrequencyLimit resolution  =  10000/4000 = 2.5 Hz < 10 Hz 
+	cFFTLength		: UDINT		:= 4096;	        // length of FFT
+    cWindowLength   : UDINT     := 4000;            // 96 samples Zero padding
+	cBufferLength	: UDINT		:= cWindowLength/2;	// buffer size due to 50% overlap
+	
+	// define frequency interval according to ISO 10816-3
+	// e.g. 10 .. 1000 Hz for rotating speed over 600r/min
+	cfLowerFrequencyLimit : UDINT := 10;   
+	cfUpperFrequencyLimit : UDINT := 1000; 
+	
+	// Parameters for RMS calculation
+	cOrderRMS        : UDINT := 2; // ISO 10816-3 requires velocity and displacement, if measured using accelerometer we need to integrate 2 times
+	cChannels		 : UDINT := 2; // ISO 10816-3 says 2 orthogonal sensors per measurement location-> 2 channels
+	cResult_Length   : UDINT := cOrderRMS+1; // nOrder+1
+	
+	// Classes according to ISO: machine type 1, stiff location, Class definitions
+	cISOClassDef_Velocity  : ARRAY[1..3] OF LREAL := [2.3E-3, 4.5E-3, 7.1E-3];
+	cISOClassDef_Displ     : ARRAY[1..3] OF LREAL := [29E-6, 57E-6, 90E-6];	
+	
+	// optional constants if real sensors are applied
+	cGravitationalAcc : LREAL := 9.81;    // 1 g approx 9.81 m/s^2 -> physical constant
+	cSensitivity      : LREAL := 0.01;    // [in Volts/g] depends on sensor used in application, e.g. 10 mV/g
+	cMeasurementRange : LREAL := 5;       // +-5 Volts (EL3632)
+	cResolution       : LREAL := 32768;   // 2^15 (15 bits resolution + 1 bit sign) (EL3632)
+	cScale            : LREAL := cMeasurementRange*cGravitationalAcc/(cSensitivity*cResolution);
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

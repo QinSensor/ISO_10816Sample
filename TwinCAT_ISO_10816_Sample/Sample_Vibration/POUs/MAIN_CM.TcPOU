@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="MAIN_CM" Id="{e9540fc6-ff1e-479a-83bc-b68a15fc8b5c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN_CM
+VAR CONSTANT
+	cInitIntRMS 	: ST_CM_IntegratedRMS_InitPars   := (	nFFT_Length := cFFTLength, 
+															nWindowLength := cWindowLength,
+															fSampleRate := cFSample,
+		 													fLowerFrequencyLimit := cfLowerFrequencyLimit,
+															fUpperFrequencyLimit := cfUpperFrequencyLimit,
+															nOrder := cOrderRMS,
+															nChannels := cChannels,                        
+															eWindowType := E_CM_WindowType.eCM_HannWindow, 
+															bTransformToDecibel:= FALSE);								
+END_VAR
+
+VAR	
+	fbRMS				: FB_CMA_IntegratedRMS  	  :=(	stInitPars := cInitIntRMS, 
+															nOwnID := eID_IntRMS, 
+															aDestIDs := [eID_Sink] );
+
+	fbErrHist			: FB_HRErrHist; // error monitoring
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Call RMS
+fbRMS.Call();
+IF fbRMS.bError THEN
+	fbErrHist.AddError(bErr:=TRUE, hrErrCode:=fbRMS.hrErrorCode, sErrSource:='MAIN_CM.fbRMS'); // error monitoring
+	// ToDo: if error
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN_CM">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
