@@ -1,0 +1,9 @@
+*.svdx
+*.tpy
+*.svdx
+*.tpy
+*.tpz
+_Boot/
+_Compile/
+*.tmc
+*.bak
